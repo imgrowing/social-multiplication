@@ -1,6 +1,8 @@
 package microservice.book.multiplication.service;
 
 import microservice.book.multiplication.domain.Multiplication;
+import microservice.book.multiplication.domain.MultiplicationResultAttempt;
+import microservice.book.multiplication.domain.User;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -36,6 +38,34 @@ public class MultiplicationServiceImplTest {
 		// assert
 		assertThat(multiplication.getFactorA()).isEqualTo(50);
 		assertThat(multiplication.getFactorB()).isEqualTo(30);
-		assertThat(multiplication.getResult()).isEqualTo(1500);
+//		assertThat(multiplication.getResult()).isEqualTo(1500);
+	}
+
+	@Test
+	public void checkCorrectAttemptTest() {
+		// given
+		Multiplication multiplication = new Multiplication(50, 60);
+		User user = new User("John_doe");
+		MultiplicationResultAttempt resultAttempt = new MultiplicationResultAttempt(user, multiplication, 3000);
+
+		// when
+		boolean attemptResult = multiplicationServiceImpl.checkAttempt(resultAttempt);
+
+		// assert
+		assertThat(attemptResult).isTrue();
+	}
+
+	@Test
+	public void checkWrongAttemptTest() {
+		// given
+		Multiplication multiplication = new Multiplication(50, 60);
+		User user = new User("John_doe");
+		MultiplicationResultAttempt resultAttempt = new MultiplicationResultAttempt(user, multiplication, 3010);
+
+		// when
+		boolean attemptResult = multiplicationServiceImpl.checkAttempt(resultAttempt);
+
+		// assert
+		assertThat(attemptResult).isFalse();
 	}
 }

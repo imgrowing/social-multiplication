@@ -1,40 +1,24 @@
 package microservice.book.multiplication.domain;
 
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.ToString;
+
 /**
- * 애플리케이션에서 곱셈을 나타내는 클래스
+ * 애플리케이션에서 곱셈을 나타내는 클래스 (a * b)
  */
-public class Multiplication {
-	// 인수
-	private int factorA;
-	private int factorB;
+@RequiredArgsConstructor
+@Getter
+@ToString
+@EqualsAndHashCode
+public final class Multiplication {
+	// 두 인수
+	private final int factorA;
+	private final int factorB;
 
-	// A * B의 결과
-	private int result;
-
-	public Multiplication(int factorA, int factorB) {
-		this.factorA = factorA;
-		this.factorB = factorB;
-		this.result = factorA * factorB;
-	}
-
-	public int getFactorA() {
-		return factorA;
-	}
-
-	public int getFactorB() {
-		return factorB;
-	}
-
-	public int getResult() {
-		return result;
-	}
-
-	@Override
-	public String toString() {
-		return "Multiplication{" +
-			"factorA=" + factorA +
-			", factorB=" + factorB +
-			", result(A*B)=" + result +
-			'}';
+	// JSON (역)직렬화를 위한 빈 생성자
+	Multiplication() {
+		this(0, 0);
 	}
 }
