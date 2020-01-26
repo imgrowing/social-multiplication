@@ -1,7 +1,6 @@
 package microservice.book.multiplication.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import microservice.book.multiplication.controller.MultiplicationResultAttemptController.ResultResponse;
 import microservice.book.multiplication.domain.Multiplication;
 import microservice.book.multiplication.domain.MultiplicationResultAttempt;
 import microservice.book.multiplication.domain.User;
@@ -36,7 +35,7 @@ public class MultiplicationResultAttemptControllerTest {
 	private MockMvc mvc;
 
 	private JacksonTester<MultiplicationResultAttempt> requestJson;
-	private JacksonTester<ResultResponse> responseJson;
+	private JacksonTester<MultiplicationResultAttempt> responseJson;
 
 	@Before
 	public void setUp() {
@@ -62,14 +61,14 @@ public class MultiplicationResultAttemptControllerTest {
 
 		User user = new User("John_doe");
 		Multiplication multiplication = new Multiplication(50, 70);
-		MultiplicationResultAttempt resultAttempt = new MultiplicationResultAttempt(user, multiplication, 3500);
+		MultiplicationResultAttempt attempt = new MultiplicationResultAttempt(user, multiplication, 3500, correct);
 
 		// when
 		MockHttpServletResponse response = mvc
 			.perform(
 				post("/results")
 					.contentType(MediaType.APPLICATION_JSON_UTF8)		// post JSON으로 보낼 때에는 content type을 반드시 지정해야 한다. 415 Unsupported Media Type 가 발생함.
-					.content(requestJson.write(resultAttempt).getJson())
+					.content(requestJson.write(attempt).getJson())
 					.accept(MediaType.APPLICATION_JSON_UTF8)
 			)
 			.andDo(print())
@@ -80,7 +79,14 @@ public class MultiplicationResultAttemptControllerTest {
 		assertThat(response.getStatus())
 			.isEqualTo(HttpStatus.OK.value());
 		assertThat(response.getContentAsString())
-			.isEqualTo(responseJson.write(new ResultResponse(correct)).getJson());
+			.isEqualTo(responseJson.write(
+				new MultiplicationResultAttempt(
+					attempt.getUser(),
+					attempt.getMultiplication(),
+					attempt.getResultAttempt(),
+					correct
+				)
+			).getJson());
 	}
 
 }
