@@ -3,6 +3,8 @@ package microservice.book.multiplication.service;
 import microservice.book.multiplication.domain.Multiplication;
 import microservice.book.multiplication.domain.MultiplicationResultAttempt;
 import microservice.book.multiplication.domain.User;
+import microservice.book.multiplication.event.EventDispatcher;
+import microservice.book.multiplication.event.MultiplicationSolvedEvent;
 import microservice.book.multiplication.repository.MultiplicationRepository;
 import microservice.book.multiplication.repository.MultiplicationResultAttemptRepository;
 import microservice.book.multiplication.repository.UserRepository;
@@ -36,12 +38,20 @@ public class MultiplicationServiceImplTest {
 	@Mock
 	private UserRepository userRepository;
 
+	@Mock
+	private EventDispatcher eventDispatcher;
+
 	@Before
 	public void setUp() {
 		//  이 테스트 클래스에서 @Mock annotation 붙은 필드를 mock 객체로 초기화 합니다.
 		//  annotation : @org.mockito.Mock, @Spy, @Captor, @InjectMocks
 		MockitoAnnotations.initMocks(this); // randomGeneratorService 가 mock 객체로 초기화 됨
-		multiplicationServiceImpl = new MultiplicationServiceImpl(randomGeneratorService, attemptRepository, multiplicationRepository, userRepository);
+		multiplicationServiceImpl = new MultiplicationServiceImpl(
+			randomGeneratorService,
+			attemptRepository,
+			multiplicationRepository,
+			userRepository,
+			eventDispatcher);
 	}
 
 	@Test
@@ -74,6 +84,7 @@ public class MultiplicationServiceImplTest {
 		// assert
 		assertThat(attemptResult).isTrue();
 		verify(attemptRepository).save(verifiedAttempt);
+		verify(eventDispatcher).send(new MultiplicationSolvedEvent(verifiedAttempt.getId(), verifiedAttempt.getUser().getId(), verifiedAttempt.isCorrect()));
 	}
 
 	@Test
@@ -91,6 +102,7 @@ public class MultiplicationServiceImplTest {
 		// assert
 		assertThat(attemptResult).isFalse();
 		verify(attemptRepository).save(attempt);
+		verify(eventDispatcher).send(new MultiplicationSolvedEvent(attempt.getId(), attempt.getUser().getId(), attempt.isCorrect()));
 	}
 
 	@Test
