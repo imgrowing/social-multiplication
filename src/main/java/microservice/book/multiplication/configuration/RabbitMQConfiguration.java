@@ -16,7 +16,7 @@ public class RabbitMQConfiguration {
 
 	@Bean
 	public TopicExchange multiplicationExchange(
-			@Value("${multiplication.exchange") final String exchangeName // application.properties 의 설정값
+			@Value("${multiplication.exchange}") final String exchangeName // application.properties 의 설정값
 	) {
 		return new TopicExchange(exchangeName);
 	}

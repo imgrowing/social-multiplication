@@ -40,6 +40,11 @@ final class MultiplicationResultAttemptController {
 		return ResponseEntity.ok(multiplicationService.getStatsForUser(alias));
 	}
 
+	@GetMapping("/{resultId}")
+	ResponseEntity<MultiplicationResultAttempt> getResultById(final @PathVariable("resultId") Long resultId) {
+		return ResponseEntity.ok(multiplicationService.getResultById(resultId));
+	}
+
 	@RequiredArgsConstructor
 	@NoArgsConstructor(force = true) // force true : 모든 final 필드를 초기화(0 / null / false) 한다.
 	@Getter

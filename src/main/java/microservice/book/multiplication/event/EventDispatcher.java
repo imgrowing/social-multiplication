@@ -21,8 +21,8 @@ public class EventDispatcher {
 
 	@Autowired
 	EventDispatcher(final RabbitTemplate rabbitTemplate, // from Spring ApplicationContext
-		@Value("${multiplication.exchange") final String multiplicationExchange,			// from application property
-		@Value("${multiplication.solved.key") final String multiplicationSolvedRoutingKey	// from application property
+		@Value("${multiplication.exchange}") final String multiplicationExchange,			// from application property
+		@Value("${multiplication.solved.key}") final String multiplicationSolvedRoutingKey	// from application property
 	) {
 		this.rabbitTemplate = rabbitTemplate;
 		this.multiplicationExchange = multiplicationExchange;

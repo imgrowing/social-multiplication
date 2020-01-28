@@ -90,4 +90,9 @@ public class MultiplicationServiceImpl implements MultiplicationService {
 		return attemptRepository.findTop5ByUserAliasOrderByIdDesc(userAlias);
 	}
 
+	@Override
+	public MultiplicationResultAttempt getResultById(Long resultId) {
+		return attemptRepository.findOne(resultId);
+	}
+
 }
